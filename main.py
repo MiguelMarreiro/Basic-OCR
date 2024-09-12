@@ -24,8 +24,8 @@ TEST_LABELS_FILENAME = DATA_DIR + 't10k-labels-idx1-ubyte'
 TRAIN_DATA_FILENAME = DATA_DIR + 'train-images-idx3-ubyte'
 TRAIN_LABELS_FILENAME = DATA_DIR + 'train-labels-idx1-ubyte'
 
-N_TRAIN_IMAGES = 1000
-N_TEST_IMAGES = 5
+N_TRAIN_IMAGES = 60000
+N_TEST_IMAGES = 1
 
 def bytes_to_int(byte_data):
     """bytes aren't iterable so we must convert to numbers """
@@ -86,7 +86,7 @@ def read_labels(filename, n_max_labels=None):
         if n_max_labels:
             n_labels = min(n_labels, n_max_labels)
         for img_index in range(n_labels):
-            label = f.read(1)
+            label = bytes_to_int(f.read(1))
             labels.append(label)
     return labels
 
@@ -151,10 +151,10 @@ def knn(X_train, y_train, X_test, k=3):
             )
         ]
         candidates = [
-            bytes_to_int(y_train[index])
+            y_train[index]
             for index in sorted_distance_indices[:k]
             ]
-
+        print(candidates)
         top_candidate = get_most_frequent(candidates)
         # y_sample = bytes_to_int(y_train[sorted_distance_indices[0]])
         y_pred.append(top_candidate)
@@ -164,32 +164,35 @@ def knn(X_train, y_train, X_test, k=3):
 
 def main():
     X_train = read_images(TRAIN_DATA_FILENAME, N_TRAIN_IMAGES)
-    y_train = read_labels(TRAIN_LABELS_FILENAME)
+    y_train = read_labels(TRAIN_LABELS_FILENAME, N_TRAIN_IMAGES)
     # [0,1,9,5,...]
-    X_test = read_images(TEST_DATA_FILENAME, N_TEST_IMAGES)
-
+    # X_test = read_images(TEST_DATA_FILENAME, N_TEST_IMAGES)
     # True solution, we won't have it for a real project, we use it to check the accuracy of the model
-    y_test = read_labels(TEST_LABELS_FILENAME)
+    y_test = read_labels(TEST_LABELS_FILENAME, N_TEST_IMAGES)
 
 
 
     if DEBUG:
+        X_test = [read_image(f'{TEST_DIR}our_test.png')]
+        y_test = [8]
         for idx, test_sample in enumerate(X_test):
             write_image(test_sample, f'{TEST_DIR}{idx}.png')
 
+
     X_train = extract_features(X_train)
     X_test = extract_features(X_test)
-    y_pred = knn(X_train,y_train, X_test,3)
+
+    y_pred = knn(X_train,y_train, X_test,7)
 
     print(y_pred)
-    matching_y_test = [bytes_to_int(value) for value in y_test[:N_TEST_IMAGES]]
+
     correct_predictions = [
         y_pred_i == y_test_i
         for y_pred_i, y_test_i
-        in zip(y_pred, matching_y_test)
+        in zip(y_pred, y_test)
     ]
     print(correct_predictions)
-    prediction_accuracy = len(correct_predictions)/len(y_pred)
+    prediction_accuracy = sum(correct_predictions)/len(y_pred)
     print(prediction_accuracy)
 
 if __name__ == '__main__':
