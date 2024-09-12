@@ -1,0 +1,75 @@
+Below is a flowchart for the provided Python application that implements the k-Nearest Neighbors (kNN) algorithm for
+Optical Character Recognition (OCR) using the MNIST dataset.
+
+```plaintext
++------------------------------------------+
+|             Start (DEBUG = True)         |
++------------------------------------------+
+                |
+                v
++------------------------------------------+
+|     Import required libraries (PIL, NumPy)|
++------------------------------------------+
+                |
+                v
++--------------------------------------------+
+|     Define helper functions:               |
+|    - read_image(path)                      |
+|    - write_image(image, path)              |
+|    - bytes_to_int(byte_data)               |
++--------------------------------------------+
+                |
+                v
++--------------------------------------------+
+|     Define file paths for datasets:        |
+|    - TRAIN_DATA_FILENAME                   |
+|    - TEST_DATA_FILENAME                    |
+|    - TRAIN_LABELS_FILENAME                 |
+|    - TEST_LABELS_FILENAME                  |
++--------------------------------------------+
+                |
+                v
++--------------------------------------------+
+|  Define functions to process MNIST data:   |
+|   - read_images(filename, n_max_images)    |
+|   - read_labels(filename, n_max_labels)    |
++--------------------------------------------+
+                |
+                v
++--------------------------------------------+
+|    Define feature extraction function:     |
+|    - extract_features(X)                   |
++--------------------------------------------+
+                |
+                v
++--------------------------------------------+
+|   Define helper functions for kNN:         |
+|    - dist(x, y): Calculate Euclidean       |
+|    - get_training_distances_for_test_sample|
+|    - get_most_frequent(list)               |
++--------------------------------------------+
+                |
+                v
++--------------------------------------------+
+|     Implement kNN algorithm:               |
+|   - knn(X_train, y_train, X_test, k=3)     |
+|   - Return predicted labels y_pred         |
++--------------------------------------------+
+                |
+                v
++--------------------------------------------+
+|              Main Function:                |
+|  - Load training images and labels         |
+|  - Load test images                        |
+|  - Run knn algorithm and classify test     |
+|  - Output predictions                      |
++--------------------------------------------+
+                |
+                v
++--------------------------------------------+
+|                  End                       |
++--------------------------------------------+
+```
+
+This flowchart describes the key components and flow of the application, starting from importing libraries, defining
+helper functions, processing the dataset, and executing the kNN algorithm.
